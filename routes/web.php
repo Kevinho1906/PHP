@@ -24,11 +24,11 @@ Route::get('/', function() {
 
 // });
 
-// Route::get('/productos', function() {
+Route::get('/productos', function() {
 
-//     return view('productos');
+    return view('productos');
 
-// });
+});
 
 // Route::get('/producto', [ProductoController::class, 'index']);
 // Route::post('/producto', [ProductoController::class, 'store']);
