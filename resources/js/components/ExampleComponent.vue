@@ -4,10 +4,11 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Example Component</div>
-
+                    <input type="text" v-model="nombre">
                     <div class="card-body">
-                        I'm an example component.
+                        {{ count }}
                     </div>
+                    <button @click="count++">Incrementar</button>                    
                 </div>
             </div>
         </div>
@@ -16,6 +17,12 @@
 
 <script>
     export default {
+        data() {
+            return {
+                count: 0,
+                nombre: ''
+            }
+        },
         mounted() {
             console.log('Component mounted.')
         }
