@@ -2,25 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductoRequest;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller {
+
+    public function __construct() {
+
+        $this->middleware('cant', ['only' => ['store']]);
+        
+    }
 
     /**
      * Display a listing of the resource.
      */
     public function index() {
 
-        return Producto::all();
+        return Producto::paginate(5);
 
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {
+    public function store(ProductoRequest $request) {
 
+        
         Producto::create($request->all());
 
     }

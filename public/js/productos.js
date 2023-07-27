@@ -8,21 +8,35 @@ function create() {
         .then(function (response) {
             console.log(response);
             read();
+            limpiar();
         })
         .catch(function (error) {
-            console.log(error);
+            console.log(error.response.data.errors);
+            let errors = "";
+            Object.values(error.response.data.errors).forEach((element) => {
+                errors += `<li>${element}</li>`;
+            });
+            errores.innerHTML = errors;
         });
+}
+
+function limpiar() {
+
+    document.getElementById("txtNombre").value = "";
+    document.getElementById("txtCantidad").value = "";
 
 }
 
-function read() {
+function read(url = "/producto") {
 
     axios
-        .get("/producto")
+        .get(url)
         .then(function (response) {
             console.log(response.data);
+            let data = "";
+            let paginacion = "";
             data = '' 
-            response.data.forEach((element, index) => {
+            response.data.data.forEach((element, index) => {
                 data += `<tr>`;
                 data += `<td class="text-center">${index + 1}</td>`;
                 data += `<td class="text-center">${element.nombre}</td>`;
@@ -31,6 +45,13 @@ function read() {
                 data += `<td class="text-center"><input onclick='load(${JSON.stringify(element)})' type="radio" name="checkOpcion" id="checkOpcion"></td>`;
                 data += `</tr>`;
             });
+
+            response.data.links.forEach(element =>{
+                paginacion += `<td><a class='links' onclick="read('${element.url}')">${element.label}</a></td>`
+            });
+
+            pages.innerHTML = paginacion
+
             table.innerHTML = data
         })
         .catch(function (error) {
@@ -49,26 +70,33 @@ function update() {
     .then(function (response) {
         console.log(response)
         read();
+        limpiar();
     })
 
 }
 
 function deletes() {
-
-    let respuesta = confirm("¿Seguro de Eliminar Este Producto?");
-    if (respuesta) {
-        
-        axios.delete("/producto/" + this.id, )
-        .then(function (response) {
-            console.log(response);
-            read();
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-
-    }
-
+    Swal.fire({
+        title: '¿Eliminar Producto?',
+        text: "¿Está Seguro De Eliminar Este Producto...?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            axios.delete("/producto/" + this.id, )
+            .then(function (response) {
+                console.log(response);
+                read();
+                limpiar()
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        }
+      })
 }
 
 function load(element) {

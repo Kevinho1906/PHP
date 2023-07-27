@@ -18,11 +18,11 @@ Route::get('/', function() {
     return view('index');
 });
 
-// Route::get('/', function () {
+Route::get('/home', function () {
 
-//     return view('welcome');
+    return view('welcome');
 
-// });
+})->name('index');
 
 Route::get('/productos', function() {
 
